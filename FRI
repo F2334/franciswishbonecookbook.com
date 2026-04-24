@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional Book Prompt and Formatting Tool</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    body {
+      background: #f4f1eb;
+      color: #222;
+      padding: 24px;
+    }
+
+    .app {
+      max-width: 1200px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1f2937, #4b5563);
+      color: white;
+      padding: 32px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 34px;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      font-size: 16px;
+      opacity: 0.9;
+      max-width: 760px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 24px;
+      background: #faf8f4;
+      border-bottom: 1px solid #ddd6cc;
+    }
+
+    .control-box label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #cfc7bb;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 15px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #6b7280;
+      box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.15);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 620px;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .panel:first-child {
+      border-right: 1px solid #ddd6cc;
+      background: #fffdf9;
+    }
+
+    .panel h2 {
+      font-size: 22px;
+      margin-bottom: 14px;
+      color: #111827;
+    }
+
+    textarea {
+      min-height: 500px;
+      resize: vertical;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 24px;
+      background: #f9fafb;
+      border-top: 1px solid #ddd6cc;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 13px 18px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      color: white;
+      background: #1f2937;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      background: #374151;
+    }
+
+    button.secondary {
+      background: #7c2d12;
+    }
+
+    button.secondary:hover {
+      background: #9a3412;
+    }
+
+    button.light {
+      background: #6b7280;
+    }
+
+    button.light:hover {
+      background: #4b5563;
+    }
+
+    #preview {
+      background: #ffffff;
+      border: 1px solid #ddd6cc;
+      border-radius: 14px;
+      padding: 34px;
+      min-height: 500px;
+      line-height: 1.8;
+      overflow: auto;
+    }
+
+    .book-title {
+      text-align: center;
+      font-size: 34px;
+      font-weight: bold;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .book-subtitle {
+      text-align: center;
+      font-size: 18px;
+      font-style: italic;
+      margin-bottom: 28px;
+      color: #4b5563;
+    }
+
+    .chapter-title {
+      font-size: 26px;
+      margin: 32px 0 16px;
+      color: #111827;
+      border-bottom: 2px solid #111827;
+      padding-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 21px;
+      margin: 24px 0 10px;
+      color: #374151;
+    }
+
+    .paragraph {
+      margin-bottom: 16px;
+      text-align: justify;
+    }
+
+    .note {
+      padding: 16px;
+      background: #f3f4f6;
+      border-left: 5px solid #374151;
+      margin: 18px 0;
+      border-radius: 8px;
+    }
+
+    .large-print #preview {
+      font-size: 19px;
+      line-height: 1.9;
+    }
+
+    .academic #preview {
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+    }
+
+    .modern #preview {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    .classic #preview {
+      font-family: Georgia, serif;
+      font-size: 17px;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .controls,
+      .buttons,
+      .panel:first-child,
+      header p {
+        display: none;
+      }
+
+      .app {
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      header {
+        background: white;
+        color: black;
+      }
+
+      .workspace {
+        display: block;
+      }
+
+      .panel {
+        padding: 0;
+      }
+
+      #preview {
+        border: none;
+        padding: 40px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .controls,
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .panel:first-child {
+        border-right: none;
+        border-bottom: 1px solid #ddd6cc;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <header>
+      <h1>Professional Book Prompt and Formatting Tool</h1>
+      <p>Paste your raw book draft, chapter, outline, or AI generated content. Add your title details, choose a style, then format, copy, save, or print your professionally structured manuscript.</p>
+    </header>
+
+    <section class="controls">
+      <div class="control-box">
+        <label for="bookTitle">Book Title</label>
+        <input id="bookTitle" placeholder="Enter book title" />
+      </div>
+
+      <div class="control-box">
+        <label for="bookSubtitle">Book Subtitle</label>
+        <input id="bookSubtitle" placeholder="Enter subtitle" />
+      </div>
+
+      <div class="control-box">
+        <label for="authorName">Author Name</label>
+        <input id="authorName" placeholder="Enter author name" />
+      </div>
+
+      <div class="control-box">
+        <label for="styleChoice">Formatting Style</label>
+        <select id="styleChoice" onchange="changeStyle()">
+          <option value="classic">Classic Publishing Style</option>
+          <option value="modern">Modern Guidebook Style</option>
+          <option value="academic">Academic Manuscript Style</option>
+          <option value="large-print">Large Print Senior Friendly Style</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="panel">
+        <h2>Book Prompt or Raw Content</h2>
+        <textarea id="rawText" placeholder="Paste your book content here. Use lines beginning with Chapter, Section, Introduction, Conclusion, Note, Tip, or Summary for automatic formatting."></textarea>
+      </div>
+
+      <div class="panel">
+        <h2>Formatted Preview</h2>
+        <div id="preview">
+          <p>Your formatted book preview will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="buttons">
+      <button onclick="formatBook()">Format Book</button>
+      <button onclick="copyFormatted()">Copy Formatted Text</button>
+      <button onclick="downloadHTML()" class="secondary">Download HTML</button>
+      <button onclick="window.print()" class="light">Print or Save as PDF</button>
+      <button onclick="clearAll()" class="light">Clear</button>
+    </section>
+  </div>
+
+  <script>
+    function escapeHTML(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatBook() {
+      const title = document.getElementById("bookTitle").value.trim();
+      const subtitle = document.getElementById("bookSubtitle").value.trim();
+      const author = document.getElementById("authorName").value.trim();
+      const raw = document.getElementById("rawText").value.trim();
+      const preview = document.getElementById("preview");
+
+      if (!raw && !title) {
+        preview.innerHTML = "<p>Please enter a book title or paste your book content first.</p>";
+        return;
+      }
+
+      let html = "";
+
+      if (title) {
+        html += `<div class="book-title">${escapeHTML(title)}</div>`;
+      }
+
+      if (subtitle) {
+        html += `<div class="book-subtitle">${escapeHTML(subtitle)}</div>`;
+      }
+
+      if (author) {
+        html += `<p style="text-align:center; margin-bottom:30px;"><strong>By ${escapeHTML(author)}</strong></p>`;
+      }
+
+      const lines = raw.split("\n").map(line => line.trim()).filter(line => line.length > 0);
+
+      lines.forEach(line => {
+        const safeLine = escapeHTML(line);
+        const lower = line.toLowerCase();
+
+        if (lower.startsWith("chapter")) {
+          html += `<h2 class="chapter-title">${safeLine}</h2>`;
+        } else if (
+          lower.startsWith("section") ||
+          lower.startsWith("introduction") ||
+          lower.startsWith("conclusion") ||
+          lower.startsWith("summary") ||
+          lower.startsWith("lesson") ||
+          lower.startsWith("part")
+        ) {
+          html += `<h3 class="section-title">${safeLine}</h3>`;
+        } else if (
+          lower.startsWith("note") ||
+          lower.startsWith("tip") ||
+          lower.startsWith("important") ||
+          lower.startsWith("key point")
+        ) {
+          html += `<div class="note"><strong>${safeLine}</strong></div>`;
+        } else {
+          html += `<p class="paragraph">${safeLine}</p>`;
+        }
+      });
+
+      preview.innerHTML = html;
+    }
+
+    function changeStyle() {
+      const app = document.getElementById("app");
+      const selectedStyle = document.getElementById("styleChoice").value;
+      app.className = "app " + selectedStyle;
+    }
+
+    function copyFormatted() {
+      const preview = document.getElementById("preview");
+      const text = preview.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Formatted text copied successfully.");
+      });
+    }
+
+    function downloadHTML() {
+      const previewContent = document.getElementById("preview").innerHTML;
+      const fullHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Formatted Book</title>
+<style>
+body { font-family: Georgia, 'Times New Roman', serif; line-height: 1.8; padding: 50px; max-width: 850px; margin: auto; color: #222; }
+.book-title { text-align: center; font-size: 34px; font-weight: bold; text-transform: uppercase; margin-bottom: 14px; }
+.book-subtitle { text-align: center; font-size: 18px; font-style: italic; margin-bottom: 28px; color: #4b5563; }
+.chapter-title { font-size: 26px; margin: 32px 0 16px; border-bottom: 2px solid #111827; padding-bottom: 8px; }
+.section-title { font-size: 21px; margin: 24px 0 10px; color: #374151; }
+.paragraph { margin-bottom: 16px; text-align: justify; }
+.note { padding: 16px; background: #f3f4f6; border-left: 5px solid #374151; margin: 18px 0; border-radius: 8px; }
+</style>
+</head>
+<body>
+${previewContent}
+</body>
+</html>`;
+
+      const blob = new Blob([fullHTML], { type: "text/html" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "formatted-book.html";
+      link.click();
+    }
+
+    function clearAll() {
+      document.getElementById("bookTitle").value = "";
+      document.getElementById("bookSubtitle").value = "";
+      document.getElementById("authorName").value = "";
+      document.getElementById("rawText").value = "";
+      document.getElementById("preview").innerHTML = "<p>Your formatted book preview will appear here.</p>";
+    }
+  </script>
+</body>
+</html>
